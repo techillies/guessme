@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en" class="high">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <meta name="viewport"
+          content="width=device-width, minimal-ui, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>Dashboard</title>
+
+
+
+    <link href="/static/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/style.css" media="screen" rel="stylesheet" type="text/css"/>
+    <link href='https://fonts.googleapis.com/css?family=Sigmar+One' rel='stylesheet' type='text/css'>
+
+    <!--[if lte IE 9]>
+    <![endif]-->
+
+</head>
+
+<body style="">
+<div class="modal fade" id="continueGame">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Welcome to GUESS ME!
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-success continue" id="continue" style="margin: 1% auto;padding:1% 5%;font-size:26px;">Jump 3 times to play again</button><br/>Just kidding.. :P Refresh the page
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Welcome to GUESS ME!
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-success startgame" id ="startgame" style="margin: 1% 27%;padding:inherit;font-size:26px;" data-dismiss="modal">START THE GAME</button>
+                <h3>Game Rules</h3>
+                <p>Language: English</p>
+                <p>Players: Minimum 4</p>
+                <p>Time Limit: 60 seconds</p>
+                <h3>How to Play?</h3>
+                <p>Team A will have 2 players X, Y and Team B will Have 2 players P and Q<br /> X will make Y to GUESS the word without making use of subwords given below the word
+                <br />If Y answers correctly then Team A gets a Point. If X uses any of the subwords then Team A Loses a point</p>
+                <p>Later Team B plays with same rules </p>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="closeModal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="ruleModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Rules are meant to be broken but not here :P
+            </div>
+            <div class="modal-body">
+                <h3>Game Rules</h3>
+                <p>Language: English</p>
+                <p>Players: Minimum 4</p>
+                <p>Time Limit: 60 seconds</p>
+                <h3>How to Play?</h3>
+                <p>Team A will have 2 players X, Y and Team B will Have 2 players P and Q<br /> X will make Y to GUESS the word without making use of subwords given below the word
+                    <br />If Y answers correctly then Team A gets a Point. If X uses any of the subwords then Team A Loses a point</p>
+                <p>Later Team B plays with same rules </p>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="rulesClose" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="container-fluid">
+    <h1 class="text-center" style="padding:2%;background-color:#8A340B;color:#fff;margin:1% auto;width:100%; border-radius:17px;">GUESS MEEEEEEEEEE!</h1>
+
+    <div class="row parent"  rel="panels" style="display:none;">
+
+        <div class="col-xs-12 panels">
+
+
+            <div class="col-xs-2">
+                <h3 id="rules" class="">Game Rules</h3>
+                <h2 id="clock"  class="text-center" style="font-size:60px;background-color:#000;color:#fff;margin:1%;width:50%; border-radius:50%;line-height:191%;"></h2>
+                <h3 class="teamA" style="color:#fff;">Team A : <span>0</span></h3>
+                <h3 class="teamB">Team B : <span >0</span></h3>
+            </div>
+            <div class="col-xs-7">
+                <h1 id = 'mainWord' class="text-center">{{ words.name}}</h1>
+
+                <hr>
+                <h4 id ="subword1" class="text-center">{{ words.subword1 }}</h4>
+                <h4 id ="subword2" class="text-center">{{ words.subword2}}</h4>
+                <h4 id ="subword3" class="text-center">{{ words.subword3 }}</h4>
+                <h4 id ="subword4" class="text-center">{{ words.subword4 }}</h4>
+                <h4 id ="subword5" class="text-center">{{ words.subword5 }}</h4>
+            </div>
+            <div class="col-xs-3">
+                <div class="col-sm-12"><button class="btn btn-primary yeah btn-lg " style=" margin-bottom:10%;color:#E0DBD2;">Correct!</button></div>
+                <div class="col-sm-12"><button class="pass btn btn-success btn-lg pass" style=" margin-bottom:10%;color:#E0DBD2;">Pass&nbsp;<span>5</span></button></div>
+                <div class="col-sm-12"><button class="wrong btn btn-danger btn-lg" style="color:#E0DBD2;">Wrong!</button></div>
+            </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+</body>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script>
+ var myInterval, scoreA = 0, scoreB =0, result, passcount = 5, team_a = true, team_b = false;
+ var myArray = [];
+ var totalwords = {{wordcount}} + 1;
+
+
+    $(document).ready(function(){
+        $('#rules').on("click",function(e){
+            $("#ruleModal").modal({backdrop: 'static', keyboard: false})
+                        $("#ruleModal").modal('show');
+
+            //clearInterval(myInterval);
+        });
+
+         $('#myModal').modal({backdrop: 'static', keyboard: false})
+         $("#myModal").modal('show');
+
+         $("#closeModal").on('click',function(){
+
+         $(".parent").css("display","none")
+         $("#continueGame").modal({backdrop: 'static', keyboard: false})
+         $("#continueGame").modal('show');
+
+
+
+         })
+
+         $(".startgame").on("click",function(e){
+            console.log("team_a:"+team_a+"==team_b:"+team_b)
+            passcount = 5
+            $(this).find('span').html(passcount);
+
+            var ri = Math.floor(Math.random() * myArray.length);
+            result = myArray[ri];
+            var rs = myArray.splice(ri, 1);
+            console.log(result)
+            get_words(result);
+            console.log(result)
+            $('#clock').css("color","#fff")
+             var counter = 61;
+             myInterval = setInterval(function () {
+                            --counter;
+                            $('#clock').html(counter)
+                            if (counter <= 0){
+
+                                passcount = 5;
+                                $('.pass').find('span').html(passcount);
+                                $('#startgame').html("Continue")
+                                $('#myModal').modal({backdrop: 'static', keyboard: false})
+                                $("#myModal").modal('show');
+                                clearInterval(myInterval);
+                                if(team_a){
+                                    team_a = false;
+                                    team_b = true;
+                                    $(".teamA").css("color","#333");
+                                    $(".teamB").css("color","#fff");
+                                    console.log("team_a:"+team_a+"==team_b:"+team_b)
+                                }
+                                else{
+                                    team_b = false;
+                                    team_a = true;
+                                    $(".teamA").css("color","#fff")
+                                    $(".teamB").css("color","#333")
+                                }
+
+                            }
+                            else if(counter <= 10 ){
+                            $('#clock').css("color","red")
+
+                            }
+            }, 1000);
+             $(".parent").css("display","block")
+        });
+        $('.yeah').on("click",function(){
+
+            if(team_a){
+                scoreA = scoreA + 2;
+                $('.teamA span').html(scoreA)
+            }
+            else{
+                scoreB = scoreB + 2;
+                $('.teamB span').html(scoreB)
+            }
+            var ri = Math.floor(Math.random() * myArray.length);
+            if (typeof myArray[ri] == 'undefined')
+            {
+            randomlyInitializeArray(1,totalwords);
+            }
+            result = myArray[ri];
+            var rs = myArray.splice(ri, 1);
+            console.log(result)
+            get_words(result);
+        });
+        $('.pass').on("click",function(){
+
+            if(team_a){
+                scoreA = scoreA - 1 ;
+                $('.teamA span').html(scoreA)
+            }
+            else{
+                scoreB = scoreB - 1;
+                $('.teamB span').html(scoreB)
+            }
+
+             $(this).find('span').html(passcount-1);
+             if(passcount == 1)
+             { passcount = 5;
+               $('.pass').find('span').html(passcount);
+               $('#startgame').html("Continue")
+               $('#myModal').modal({backdrop: 'static', keyboard: false})
+               $("#myModal").modal('show');
+               clearInterval(myInterval);
+
+                if(team_a){
+                                    team_a = false;
+                                    team_b = true;
+                                    $(".teamA").css("color","#333")
+                                    $(".teamB").css("color","#fff")
+                                    console.log("team_a:"+team_a+"==team_b:"+team_b)
+                                }
+                                else{
+                                    team_b = false;
+                                    team_a = true;
+                                    $(".teamA").css("color","#fff")
+                                    $(".teamB").css("color","#333")
+                                }
+            }
+             passcount = passcount - 1;
+            var ri = Math.floor(Math.random() * myArray.length);
+            if (typeof myArray[ri] == 'undefined')
+            {
+            randomlyInitializeArray(1,totalwords);
+            }
+            result = myArray[ri];
+            var rs = myArray.splice(ri, 1);
+            console.log(result)
+            get_words(result);
+        });
+
+        $('.wrong').on("click",function(){
+
+            if(team_a){
+                scoreA = scoreA - 2 ;
+                $('.teamA span').html(scoreA)
+            }
+            else{
+                scoreB = scoreB - 2;
+                $('.teamB span').html(scoreB)
+            }
+
+            var ri = Math.floor(Math.random() * myArray.length);
+            if (typeof myArray[ri] == 'undefined')
+            {
+            randomlyInitializeArray(1,totalwords);
+            }
+            result = myArray[ri];
+            var rs = myArray.splice(ri, 1);
+            console.log(result)
+            get_words(result);
+        });
+
+
+
+    });
+
+function shuffle(o) { //v1.0
+  for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+  return o;
+};
+
+function randomIntFromInterval(min, max) {
+  return max;
+}
+
+
+    function randomlyInitializeArray(min, max) {
+  var start = min;
+  var randomMax = randomIntFromInterval(min, max)
+
+  for (var i = 0; start <= randomMax; myArray[i++] = start++);
+
+  myArray = shuffle(myArray);
+  console.log("Min: "+min);
+  console.log("Max: "+max);
+  console.log("random Max: "+randomMax)
+
+  console.log(myArray)
+
+}
+
+randomlyInitializeArray(1,totalwords);
+
+
+    function get_words(randompk) {
+        $.ajax({
+                type: "GET",
+                url: "/getnextword/",
+                data: {'randompk' : randompk}
+            }).done(function( content ) {
+                    $("#mainWord").html(content.name)
+                    $("#subword1").html(content.subword1)
+                    $("#subword2").html(content.subword2)
+                    $("#subword3").html(content.subword3)
+                    $("#subword4").html(content.subword4)
+                    $("#subword5").html(content.subword5)
+            })
+
+    };
+</script>
+<!--script>
+
+    var myInterval;
+    var timer;
+    var counter = 5;
+    $(document).ready(function(){
+
+        $('#rules').on("click",function(e){
+            $("#ruleModal").modal('show');
+            $("#ruleModal").modal({backdrop: 'static', keyboard: false})
+            clearInterval(timer);
+        });
+
+        $('#rulesClose').on("click",function(e){
+
+        })
+         $('#myModal').modal({backdrop: 'static', keyboard: false})
+         $("#myModal").modal('show');
+
+         $(".startgame").on("click",function(e){
+               get_words();
+            var timer = setInterval(myInterval , 1000);
+         $(".parent").css("display","block")
+        });
+        $(".continue").on("click",function(e){
+            cleartimer();
+              counter = 10;
+               get_words();
+            var timer = setInterval(myInterval , 1000);
+         $(".parent").css("display","block")
+        });
+        $('.yeah').on("click",function(){
+           get_words();
+        });
+
+    });
+
+    myInterval = function(){
+                             --counter;
+                            $('#clock').html(counter)
+                            if (counter <= 0){
+                                $('#continueGame').modal({backdrop: 'static', keyboard: false})
+                                $("#continueGame").modal('show');
+                            }
+    };
+
+    function cleartimer(myInterval){
+    clearInterval(myInterval)
+
+    };
+
+    function get_words() {
+        console.log("getwords")
+        count = {{ wordcount }} + 1;
+        randompk = Math.floor(Math.random() * count);
+        if (randompk == 0){ randompk = 1 }
+        console.log("random:"+randompk)
+        $.ajax({
+                type: "GET",
+                url: "/getnextword/",
+                data: {'randompk' : randompk}
+            }).done(function( content ) {
+                    $("#mainWord").html(content.name)
+                    $("#subword1").html(content.subword1)
+                    $("#subword2").html(content.subword2)
+                    $("#subword3").html(content.subword3)
+                    $("#subword4").html(content.subword4)
+                    $("#subword5").html(content.subword5)
+            })
+
+    };
+
+
+
+
+
+
+</script!-->
+</html>

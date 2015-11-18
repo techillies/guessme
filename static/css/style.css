@@ -1,0 +1,38 @@
+
+ body{
+ font-family: 'Sigmar One', cursive;
+ background-color:#181B07;
+ }
+
+ h4{
+        width: 45%;
+        border-radius:5px;
+        margin: 1% auto;
+        padding:1%;
+        font-size: 30px;
+        }
+        #mainWord {
+         margin: 1% auto;
+         border-radius:5px;
+         padding:1%;
+         background-color: #0D5C84;
+         width:80%;
+         color:#E0DBD2;
+        }
+        #subword1{background:#66D666; color:#251C0C;}
+        #subword2{background: #EFB154;color:#251C0C;}
+        #subword3{background:#D63E3E;color:#251C0C;}
+        #subword5{background: #CF71DA;color:#251C0C;}
+        #subword4{background:orange;color:#251C0C;}
+
+        @media only screen and (max-width: 920px) {
+            body {
+
+            }
+            #clock, #rules, .teanA, .teamB{
+            font-size:20px !important;
+            }
+            h4{
+            font-size:16px;
+            }
+        }

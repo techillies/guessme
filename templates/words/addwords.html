@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" class="high">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <meta name="viewport"
+          content="width=device-width, minimal-ui, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>Dashboard</title>
+
+
+
+    <link href="/static/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css"/>
+    <!--[if lte IE 9]>
+    <![endif]-->
+
+</head>
+
+<body>
+
+                <div class="container-fluid">
+                    <div class="row" rel="panels">
+                        <div class="col-md-12 panels">
+
+                            <form class="form-horizontal" role="form" action="/addwords/" method="post">{% csrf_token %}
+                                <div class="col-sm-12">
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Word Name</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="name" required=""/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Sub-word-1</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="subword1" required=""/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Sub-word-2</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="subword2" required=""/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Sub-word-3</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="subword3"  required=""/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Sub-word-4</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="subword4"  required=""/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Sub-word-5</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="subword5"  required=""/>
+                                        </div>
+                                    </div>
+                                    <div class="actions col-sm-6">
+                                        <input name="commit" type="submit" class="btn btn-primary pull-right" value="SUBMIT" />
+                                    </div>
+
+                                </div>
+                            </form>
+
+
+                        </div>
+
+                    </div>
+
+    </div>
+
+
+
+
+</body>
+<script src="/static/js/jquery.min.js"></script>
+
+</html>
